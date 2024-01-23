@@ -17,6 +17,7 @@ function App() {
   const [room, setRoom] = useState('')
   const [socketId, setSocketId] = useState('')
   const [messages, setMessages] = useState([])
+  const [roomName, setRoomName] = useState('')
 
 
 
@@ -75,6 +76,14 @@ function App() {
     setRoom("")
   };
 
+  const handleRoomNameSubmit = (e) => {
+    e.preventDefault();
+    // console.log('Room entered:', room);
+    socket.emit("join-room", roomName)
+
+    setRoomName("")
+  };
+
   // Function to handle input changes
   const handleChange = (e) => {
     setMessage(e.target.value);
@@ -84,26 +93,36 @@ function App() {
   return (
     <div >
       {/* <Message/> */}
-      <div>
+      <div className='m-4'>
         {socketId}
       </div>
-      <div>
+      <div className='m-4'>
         <form onSubmit={handleSubmit}>
           <label>
             Message:
-            <input type="text" value={message} onChange={handleChange} />
+            <input className='border m-3' type="text" value={message} onChange={handleChange} />
           </label>
-          <button type="submit">Submit</button>
+          <button className='m-2 px-2 py-2 bg-blue-600 rounded text-white' type="submit">Submit</button>
         </form>
 
         <form onSubmit={handleRoomSubmit}>
           <label>
             Room:
-            <input type="text" value={room} onChange={(e) => setRoom(e.target.value)} />
+            <input className='border m-3' type="text" value={room} onChange={(e) => setRoom(e.target.value)} />
           </label>
-          <button type="submit">enter</button>
+          {/* <button type="submit">enter</button> */}
+        </form>
+
+        <form onSubmit={handleRoomNameSubmit}>
+          <label>
+            Room Name:
+            <input className='border m-3' type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+          </label>
+          <button className='m-2 px-2 py-2 bg-blue-600 rounded text-white' type="submit">Join</button>
         </form>
       </div>
+
+        
 
       <div>
         {messages.map((m,i) => (
